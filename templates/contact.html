@@ -1,0 +1,10 @@
+<h2>Contact Us (Input Validation)</h2>
+<form method="POST">
+    {{ form.hidden_tag() }} {{ form.name.label }} {{ form.name() }}<br><br>
+    {{ form.email.label }} {{ form.email() }}<br><br>
+    {{ form.message.label }} {{ form.message() }}<br><br>
+    {{ form.submit() }}
+</form>
+{% with messages = get_flashed_messages() %}{% if messages %}
+    {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+{% endif %}{% endwith %}
