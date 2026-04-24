@@ -1,11 +1,19 @@
-def flag = false // Set to false to see the test stage get skipped
+def flag = true 
 
 pipeline {
     agent any
+    
+    environment {
+        // Variables defined here can be used by any stage
+        NEW_VERSION = '1.3.0'
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building Project'
+                // Using environment variable. Use double quotes to output the value!
+                echo "Building version ${NEW_VERSION}"
             }
         }
         stage('Test') {
