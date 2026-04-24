@@ -1,3 +1,5 @@
+def flag = false // Set to false to see the test stage get skipped
+
 pipeline {
     agent any
     stages {
@@ -7,6 +9,9 @@ pipeline {
             }
         }
         stage('Test') {
+            when {
+                expression { flag == true }
+            }
             steps {
                 echo 'Testing Project'
             }
@@ -17,14 +22,11 @@ pipeline {
             }
         }
     }
-    // The conditions here will execute after the build is done
     post {
         always {
-            // This action will happen always regardless of the result of build
             echo 'Post Build condition running'
         }
         failure {
-            // This action will happen only if the build has failed
             echo 'Post action if Build Fails'
         }
     }
