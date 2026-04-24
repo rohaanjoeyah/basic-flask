@@ -1,10 +1,14 @@
-def flag = true 
-
 pipeline {
     agent any
     
+    parameters {
+        // These are types of parameters
+        string(name: 'VERSION', defaultValue: '', description: 'Version to deploy on prod')
+        choice(name: 'CHOICE_VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
+        booleanParam(name: 'executeTests', defaultValue: true, description: 'Check to run tests')
+    }
+
     tools {
-        // Make sure 'Maven' matches the exact name in your Jenkins Tools configuration
         maven 'Maven' 
     }
     
@@ -17,13 +21,13 @@ pipeline {
             steps {
                 echo 'Building Project'
                 echo "Building version ${NEW_VERSION}"
-                // Using bat for Windows instead of sh
-                bat "mvn -version" 
+                bat "mvn -version"
             }
         }
         stage('Test') {
             when {
-                expression { flag == true }
+                // This checks the boolean parameter we defined above
+                expression { params.executeTests == true }
             }
             steps {
                 echo 'Testing Project'
@@ -32,6 +36,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Project'
+                // Printing out the string parameter the user typed in
+                echo "Deploying user version: ${params.VERSION}" 
             }
         }
     }
