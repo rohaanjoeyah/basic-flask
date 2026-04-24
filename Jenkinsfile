@@ -3,8 +3,12 @@ def flag = true
 pipeline {
     agent any
     
+    tools {
+        // Make sure 'Maven' matches the exact name in your Jenkins Tools configuration
+        maven 'Maven' 
+    }
+    
     environment {
-        // Variables defined here can be used by any stage
         NEW_VERSION = '1.3.0'
     }
 
@@ -12,8 +16,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Project'
-                // Using environment variable. Use double quotes to output the value!
                 echo "Building version ${NEW_VERSION}"
+                // Using bat for Windows instead of sh
+                bat "mvn -version" 
             }
         }
         stage('Test') {
